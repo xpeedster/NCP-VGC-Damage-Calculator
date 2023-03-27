@@ -254,6 +254,74 @@ function eraseCookie(name) {
 	createCookie(name,"",-1);
 }
 
+var attack_1 = "default 1"
+var attack_2 = "default 2"
+
+
+function transform_str_to_int_list(attack_str)
+{
+    var clean_str = attack_str.replace('(', '')
+    clean_str = clean_str.replace(')', '');
+    var first_attack_list = clean_str.split(", ");
+    var result = first_attack_list.map(function (x) { 
+        return parseInt(x, 10); 
+      });
+    return result
+}
+
+function sum_all_combinations(int_list_1, int_list_2)
+{
+    C = [];
+    for (let i = 0; i < int_list_1.length; i++)
+    {
+        for (let j = 0; j < int_list_2.length; j++)
+        {
+            C.push(int_list_1[i] + int_list_2[j]);
+        }
+    }        
+    return C
+}
+
+function check_chance_of_killing(possibilities, opp_hp)
+{
+    var chance = 0
+    for (let n = 0; n < possibilities.length; n++)
+    {
+        if (possibilities[n] >= opp_hp)
+        {
+            chance = chance + 1
+        }
+    }
+    return chance/256 * 100
+}
+
+
+
+var save_attack_1 = function()
+{
+    attack_1 = $("#damageValues").text();
+    window.alert(`Saved first attack roll ${attack_1}`);
+}
+
+var save_attack_2 = function()
+{
+    attack_2 = $("#damageValues").text();
+    window.alert(`Saved second attack roll ${attack_2}`);
+
+}
+
+var calc_chance = function()
+{
+    var int_at_1 = transform_str_to_int_list(attack_1);
+    var int_at_2 = transform_str_to_int_list(attack_2);
+    var result_sum = sum_all_combinations(int_at_1, int_at_2)
+    var chance_res = check_chance_of_killing(result_sum, $(".current-hp").val())
+    window.alert(`Chances of killing are: ${chance_res}`)
+
+}
+
+
+
 var savecustom = function()
 {
     gen = parseInt($('input[name="gen"]:checked').val());
